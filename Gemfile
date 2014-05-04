@@ -13,6 +13,7 @@ gem 'bootstrap-will_paginate', '~> 0.0.9'
 group :development, :test do
   gem 'sqlite3', '~> 1.3.8'
   gem 'rspec-rails', '~> 2.13.1'
+  gem 'guard-rspec', '~> 2.5.0'
   # The following optional lines are part of the advanced setup.
   # gem 'guard-rspec', '2.5.0'
   # gem 'spork-rails', '4.0.0'
