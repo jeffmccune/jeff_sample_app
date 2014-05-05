@@ -37,12 +37,20 @@ describe User do
   end
 
   context "when email format is valid" do
+    let(:email) { "foo@example.com" }
+
     it "should be valid" do
       addresses = %w[user@foo.COM A_US-ER@f.b.org frst.lst@foo.jp a+b@baz.cn]
       addresses.each do |valid_address|
         @user.email = valid_address
         expect(@user).to be_valid
       end
+    end
+
+    it "stores the downcase email value to the database" do
+      @user.email = email.upcase
+      @user.save
+      expect(@user.email).to eq(email.downcase)
     end
   end
 
