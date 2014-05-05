@@ -44,7 +44,7 @@ describe User do
   end
 
   context "when email format is valid" do
-    let(:email) { "foo@example.com" }
+    let(:mixed_case_email) { "FoO@ExAmPlE.CoM" }
 
     it "should be valid" do
       addresses = %w[user@foo.COM A_US-ER@f.b.org frst.lst@foo.jp a+b@baz.cn]
@@ -55,9 +55,9 @@ describe User do
     end
 
     it "stores the downcase email value to the database" do
-      @user.email = email.upcase
+      @user.email = mixed_case_email
       @user.save
-      expect(@user.email).to eq(email.downcase)
+      expect(@user.reload.email).to eq(mixed_case_email.downcase)
     end
   end
 
