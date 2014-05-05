@@ -10,13 +10,18 @@ describe User do
 
   it { should be_valid }
 
-  describe "when name is not present" do
+  context "when name is not present" do
     before { @user.name = " " }
     it { should_not be_valid }
   end
 
-  describe "when email is not present" do
+  context "when email is not present" do
     before { @user.email = " " }
+    it { should_not be_valid }
+  end
+
+  context "when name is too long" do
+    before { @user.name = "a" * 51 }
     it { should_not be_valid }
   end
 end
