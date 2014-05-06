@@ -4,7 +4,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(user_params)
+    @user = User.new(user_params)    # Not the final implementation!
+    if @user.save
+      # Handle a successful save
+    else
+      render 'new'
+    end
   end
 
   def show
@@ -14,6 +19,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password,
+                                 :password_confirmation)
   end
 end
