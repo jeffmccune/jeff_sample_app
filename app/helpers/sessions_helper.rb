@@ -10,6 +10,14 @@ module SessionsHelper
     self.current_user = user
   end
 
+  def sign_out
+    # Invalidate the existing remember_token by creating a new one.
+    current_user.update_attribute(:remember_token,
+                                  User.digest(User.new_remember_token))
+    cookies.delete(:remember_token)
+    self.current_user = nil
+  end
+
   def signed_in?
     !!current_user
   end
