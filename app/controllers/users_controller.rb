@@ -3,7 +3,8 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
 
   def index
-    @users = User.all
+    # params[:page] is generated automatically by will_paginate
+    @users = User.paginate(page: params[:page])
   end
 
   def show
