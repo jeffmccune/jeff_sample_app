@@ -107,6 +107,18 @@ describe "Authentication" do
         before { delete user_path(user) }
         specify { expect(response).to redirect_to(root_url) }
       end
+
+      context "submitting a PATCH request to the Users#update action" do
+        let :user_attrs do
+          { admin: true,
+            password: non_admin.password,
+            password_confirmation: non_admin.password }
+        end
+        it "cannot update the admin attribute of itself" do
+          patch(user_path(non_admin), id: non_admin, user: user_attrs)
+          expect(non_admin.reload).not_to be_admin
+        end
+      end
     end
   end
 end
