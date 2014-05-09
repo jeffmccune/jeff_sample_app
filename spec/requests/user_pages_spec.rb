@@ -152,4 +152,21 @@ describe "User pages" do
       end
     end
   end
+
+  context "signed in user" do
+    let(:user) { FactoryGirl.create(:user) }
+    # We need to use no_capybara: true when setting expectations against the
+    # response object so cookies are set directly.
+    before { sign_in user, no_capybara: true }
+
+    describe "users#new" do
+      before { get new_user_path(user) }
+      specify { expect(response).to redirect_to(root_path) }
+    end
+
+    describe "users#create" do
+      before { post users_path, id: user, user: { name: user.name } }
+      specify { expect(response).to redirect_to(root_path) }
+    end
+  end
 end
