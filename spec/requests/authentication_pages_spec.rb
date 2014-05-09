@@ -27,6 +27,11 @@ describe "Authentication" do
         it('should not have an error message') do
           should_not have_error_message
         end
+
+        it { should_not have_link('Users', href: users_path) }
+        it { should_not have_link('Profile') }
+        it { should_not have_link('Settings') }
+        it { should_not have_link('Sign out', href: signout_path) }
       end
     end
 
