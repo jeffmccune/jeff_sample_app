@@ -27,6 +27,11 @@ describe "Authentication" do
         it('should not have an error message') do
           should_not have_error_message
         end
+
+        it { should_not have_link('Users', href: users_path) }
+        it { should_not have_link('Profile') }
+        it { should_not have_link('Settings') }
+        it { should_not have_link('Sign out', href: signout_path) }
       end
     end
 
@@ -58,6 +63,20 @@ describe "Authentication" do
         describe "after signing in" do
           it "should render the desired protected page" do
             expect(page).to have_title('Edit user')
+          end
+
+          context "when signing in again" do
+            before do
+              click_link "Sign out"
+              visit signin_path
+              fill_in "Email", with: user.email
+              fill_in "Password", with: user.password
+              click_button "Sign in"
+            end
+
+            it "should render the default (profile) page" do
+              expect(page).to have_title(user.name)
+            end
           end
         end
       end
@@ -106,6 +125,18 @@ describe "Authentication" do
       context "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
         specify { expect(response).to redirect_to(root_url) }
+      end
+
+      context "submitting a PATCH request to the Users#update action" do
+        let :user_attrs do
+          { admin: true,
+            password: non_admin.password,
+            password_confirmation: non_admin.password }
+        end
+        it "cannot update the admin attribute of itself" do
+          patch(user_path(non_admin), id: non_admin, user: user_attrs)
+          expect(non_admin.reload).not_to be_admin
+        end
       end
     end
   end

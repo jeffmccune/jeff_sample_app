@@ -130,7 +130,7 @@ describe "User pages" do
         fill_in "Name", with: "Example User"
         fill_in "Email", with: "user@example.com"
         fill_in "Password", with: "foobar"
-        fill_in "Confirmation", with: "foobar"
+        fill_in "Confirm Password", with: "foobar"
       end
 
       it "creates a user" do
@@ -150,6 +150,34 @@ describe "User pages" do
           it { should have_link('Sign in') }
         end
       end
+    end
+  end
+
+  context "signed in user" do
+    let(:user) { FactoryGirl.create(:user) }
+    # We need to use no_capybara: true when setting expectations against the
+    # response object so cookies are set directly.
+    before { sign_in user, no_capybara: true }
+
+    describe "users#new" do
+      before { get new_user_path(user) }
+      specify { expect(response).to redirect_to(root_path) }
+    end
+
+    describe "users#create" do
+      before { post users_path, id: user, user: { name: user.name } }
+      specify { expect(response).to redirect_to(root_path) }
+    end
+  end
+
+  context "signed in admin user" do
+    let(:admin) { FactoryGirl.create(:admin) }
+    before { sign_in(admin, no_capybara: true) }
+
+    describe "users#destroy" do
+      before { delete(user_path(id: admin)) }
+      specify { expect(response).to redirect_to(users_path) }
+      specify { expect(admin.reload).not_to raise_error }
     end
   end
 end

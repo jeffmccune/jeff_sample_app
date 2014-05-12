@@ -16,7 +16,18 @@
       <% end %>
       <%= yield %>
       <%= render 'layouts/footer' %>
-      <%= debug(params) if Rails.env.development? %>
+      <% if Rails.env.development? %>
+        <%= debug(params: params,
+                  method: request.method,
+                  fullpath: request.fullpath,
+                  uuid: request.uuid,
+                  query_parameters: request.query_parameters,
+                  content_length: request.content_length,
+                  media_type: request.media_type,
+                  authorization: request.authorization,
+                  original_url: request.original_url,
+                  request_parameters: request.request_parameters) %>
+      <% end %>
     </div>
   </body>
 </html>
