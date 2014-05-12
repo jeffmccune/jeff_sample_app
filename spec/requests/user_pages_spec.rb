@@ -169,4 +169,15 @@ describe "User pages" do
       specify { expect(response).to redirect_to(root_path) }
     end
   end
+
+  context "signed in admin user" do
+    let(:admin) { FactoryGirl.create(:admin) }
+    before { sign_in(admin, no_capybara: true) }
+
+    describe "users#destroy" do
+      before { delete(user_path(id: admin)) }
+      specify { expect(response).to redirect_to(users_path) }
+      specify { expect(admin.reload).not_to raise_error }
+    end
+  end
 end
