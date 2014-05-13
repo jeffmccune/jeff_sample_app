@@ -9,4 +9,10 @@ FactoryGirl.define do
       admin true
     end
   end
+
+  # Usable with: FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+  factory :micropost do
+    content "Lorem ipsum"
+    user
+  end
 end
