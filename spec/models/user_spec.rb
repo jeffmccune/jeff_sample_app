@@ -20,9 +20,11 @@ describe User do
   # Follower / Followed relationships (railstutorial.org section 11.1.2)
   it { should respond_to(:feed) }
   it { should respond_to(:relationships) }
-  # Followed users (railstutorial.org section 11.1.4)
-  it { should respond_to(:relationships) }
+  # Reverse relationships (11.1.5)
   it { should respond_to(:followed_users) }
+  it { should respond_to(:reverse_relationships) }
+  # Followed users (railstutorial.org section 11.1.4)
+  it { should respond_to(:followers) }
   it { should respond_to(:following?) }
   it { should respond_to(:follow!) }
   it { should respond_to(:unfollow!) }
@@ -175,6 +177,11 @@ describe User do
 
     it { should be_following(other_user) }
     its(:followed_users) { should include(other_user) }
+
+    describe "followed user" do
+      subject { other_user }
+      its(:followers) { should include(@user) }
+    end
 
     describe "and unfollowing" do
       before { @user.unfollow!(other_user) }
